@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script>
+
+var nodes = [
+  {name: "AI Safety & Regulation", id: 1},
+  
+  {name: "Trabajos e IA", id: 2},
+  {name: "Se debate si la IA amenaza empleos. Altman opina que la IA creará más trabajos, aunque puede causar caos económico a corto plazo.", id: 3},
+  {name: "Geoffrey Hinton sostiene que la IA puede cambiar cómo trabajamos y vivimos, pero la transición debe ser manejada con cuidado.", id: 4},
+  {name: "El video 'Humans Need Not Apply' sugiere que la automatización puede hacer a muchos humanos 'inempleables', similar a los caballos tras la invención del automóvil.", id: 5},
+  {name: "El video también sugiere que la IA puede ser más peligrosa que la Gran Depresión en términos de desempleo y agitación social.", id: 6},
+  {name: "La tecnología se está desarrollando a un ritmo que supera a la biología, lo que puede poner en peligro muchos trabajos.", id: 7},
+  
+  {name: "Problemas de Derechos de Autor", id: 8},
+  {name: "Se debaten las cuestiones de autoría cuando la IA crea algo similar a una obra existente.", id: 9},
+  {name: "La IA a veces se entrena con obras de arte sin el permiso del artista, planteando problemas de derechos de autor.", id: 10},
+  {name: "La prueba de infracción de derechos de autor es la 'similitud sustancial', lo que puede ser ambiguo.", id: 11},
+  {name: "La doctrina del uso justo puede aplicarse si la obra es transformada lo suficiente para considerarse nueva.", id: 12},
+  {name: "Hay casos legales en curso que tratan estos temas.", id: 13},
+  
+  {name: "Seguridad y Privacidad", id: 14},
+  {name: "La seguridad nacional y la privacidad son preocupaciones principales en el uso de la IA.", id: 15},
+  {name: "Edward Snowden plantea la preocupación de que las IA no comprenden conceptos fundamentales como la privacidad y la seguridad.", id: 16},
+  {name: "La IA puede ser utilizada para detectar amenazas de seguridad pero también puede ser explotada con fines maliciosos.", id: 17},
+  {name: "Una preocupación de seguridad es que la IA pueda ser utilizada para fines maliciosos, como robo de datos y creación de deepfakes.", id: 18},
+  {name: "En cuanto a la privacidad, las IA pueden recopilar y utilizar datos personales sin consentimiento adecuado.", id: 19},
+  
+  {name: "Inteligencia General Artificial (AGI)", id: 20},
+  {name: "La AGI es tanto emocionante como aterradora, pero necesitamos prepararnos para su llegada.", id: 21},
+  {name: "Sam Altman sugiere que debemos aprender temprano y limitar nuestras oportunidades de 'solo un intento' para hacerlo bien.", id: 22},
+  {name: "OpenAI se vuelve más cauteloso a medida que se acerca a la AGI.", id: 23},
+  {name: "Hay falta de urgencia en cuanto a la AGI, aunque se mencionó varias veces en la audiencia del Congreso de los EE.UU.", id: 24},
+  
+  {name: "Reguladores y Big Tech", id: 25},
+  {name: "Las inversiones de las grandes tecnológicas pueden influir en cómo se desarrolla y regula la IA.", id: 26},
+  {name: "La regulación de la IA es un tema complejo y delicado.", id: 27},
+  {name: "A pesar de la necesidad de regulación, las grandes tecnológicas pueden influir en las regulaciones a su favor.", id: 28},
+  {name: "Las grandes empresas tecnológicas tienen la responsabilidad de garantizar la seguridad de la IA.", id: 29},
+  {name: "La regulación de la IA podría limitar la capacidad de estas empresas para innovar, pero también puede prevenir el mal uso de la IA.", id: 30},
+  {name: "Las grandes empresas tecnológicas a menudo tienen una gran cantidad de datos a su disposición, lo que puede darles una ventaja injusta y plantear problemas de privacidad y seguridad. La regulación puede ayudar a garantizar que las grandes tecnológicas no abusen de su poder al utilizar la IA.", id: 31},
+  {name: "Las regulaciones pueden requerir que las grandes tecnológicas sean más transparentes sobre cómo utilizan la IA y los datos que recopilan.", id: 32},
+  {name: "La falta de diversidad en las grandes tecnológicas puede afectar cómo se desarrolla y utiliza la IA, lo que puede ser un área de enfoque para la regulación.", id: 33},
+  {name: "Las regulaciones pueden ayudar a prevenir la discriminación y los sesgos en los sistemas de IA desarrollados por las grandes tecnológicas.", id: 34},
+  {name: "Las grandes tecnológicas pueden enfrentar sanciones y multas si no cumplen con las regulaciones de IA.", id: 35}
+]
+
+var links = [
+  {source: 1, target: 2}, // Link between AI Safety & Regulation and Trabajos e IA
+  {source: 2, target: 3}, // Links for subtopics of Trabajos e IA
+  {source: 2, target: 4},
+  {source: 2, target: 5},
+  {source: 2, target: 6},
+  {source: 2, target: 7},
+  
+  {source: 1, target: 8}, // Link between AI Safety & Regulation and Problemas de Derechos de Autor
+  {source: 8, target: 9}, // Links for subtopics of Problemas de Derechos de Autor
+  {source: 8, target: 10},
+  {source: 8, target: 11},
+  {source: 8, target: 12},
+  {source: 8, target: 13},
+  
+  {source: 1, target: 14}, // Link between AI Safety & Regulation and Seguridad y Privacidad
+  {source: 14, target: 15}, // Links for subtopics of Seguridad y Privacidad
+  {source: 14, target: 16},
+  {source: 14, target: 17},
+  {source: 14, target: 18},
+  {source: 14, target: 19},
+
+  {source: 1, target: 20}, // Link between AI Safety & Regulation and Inteligencia General Artificial (AGI)
+  {source: 20, target: 21}, // Links for subtopics of Inteligencia General Artificial (AGI)
+  {source: 20, target: 22},
+  {source: 20, target: 23},
+  {source: 20, target: 24},
+
+  {source: 1, target: 25}, // Link between AI Safety & Regulation and Reguladores y Big Tech
+  {source: 25, target: 26}, // Links for subtopics of Reguladores y Big Tech
+  {source: 25, target: 27},
+  {source: 25, target: 28},
+  {source: 25, target: 29},
+  {source: 25, target: 30},
+  {source: 25, target: 31},
+  {source: 25, target: 32},
+  {source: 25, target: 33},
+  {source: 25, target: 34},
+  {source: 25, target: 35}
+]
+
+var width = 960,
+    height = 500
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).distance(200))
+    .force("charge", d3.forceManyBody().strength(-500))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var link = svg.selectAll(".link")
+    .data(links)
+    .enter().append("line")
+    .attr("class", "link");
+
+var node = svg.selectAll(".node")
+    .data(nodes)
+    .enter().append("g")
+    .attr("class", "node")
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("circle")
+    .attr("r", 5);
+
+node.append("text")
+    .attr("dx", 12)
+    .attr("dy", ".35em")
+    .text(function(d) { return d.name });
+
+force.on("tick", function() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+});
+
+function dragstarted(event, d) {
+  if (!event.active) force.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(event, d) {
+  d.fx = event.x;
+  d.fy = event.y;
+}
+
+function dragended(event, d) {
+  if (!event.active) force.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
